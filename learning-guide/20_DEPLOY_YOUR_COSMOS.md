@@ -61,7 +61,7 @@ In Lesson 11 the API allowed only `localhost` websites. Online, your website has
 
 The only code change: CORS origins now come from `COSMOS_CORS_ORIGINS`. Port `4173` is added for Step 4's rehearsal.
 
-**File:** `my_cosmos/backend/app/main.py`
+**File:** `my_cosmos/backend/app/main.py` don't replace, Just Update
 
 ```python
 """My COSMOS API.
