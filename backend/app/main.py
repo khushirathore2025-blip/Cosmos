@@ -1,6 +1,10 @@
-"""COSMOS API. Run: uvicorn app.main:app --reload --port 8010 (from backend/)."""
+"""My COSMOS API.
+Local:   uvicorn app.main:app --reload --port 8020
+Server:  uvicorn app.main:app --host 0.0.0.0 --port $PORT
+"""
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from typing import Literal, Optional
 
@@ -25,6 +29,15 @@ from .vectors import setup_vectors
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("cosmos")
+
+# Websites allowed to call this API. On a server, set COSMOS_CORS_ORIGINS to your site's
+# address(es), comma-separated, e.g. "https://my-cosmos.example".
+DEFAULT_ORIGINS = "http://localhost:5173,http://localhost:5174,http://localhost:4173"
+ORIGINS = [
+    o.strip().rstrip("/")
+    for o in os.getenv("COSMOS_CORS_ORIGINS", DEFAULT_ORIGINS).split(",")
+    if o.strip()
+]
 
 
 class State:
@@ -60,8 +73,14 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="COSMOS API", version="0.1.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins), allow_methods=["GET", "POST"], allow_headers=["*"])
+app = FastAPI(title="My COSMOS API", version="0.1.0", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ORIGINS,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 
 
 def st(request: Request) -> State:

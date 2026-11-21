@@ -10,3 +10,16 @@ dist/
 build/
 .vite/
 .DS_Store
+
+# dependencies and builds
+node_modules/
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+
+# local settings and secrets
+.env.local
+.env.*.local
+*.local
+.env
